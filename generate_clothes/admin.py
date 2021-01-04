@@ -7,4 +7,5 @@ admin.site.register(SubCategoryClother)
 admin.site.register(SizeCategory)
 admin.site.register(SubCategorySize)
 admin.site.register(CustomStyleCategory)
+admin.site.register(Colour)
 

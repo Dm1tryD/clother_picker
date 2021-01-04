@@ -33,7 +33,6 @@ class SizeCategory(models.Model):
     def __str__(self):
         return self.category_name
 
-
 class SubCategorySize(models.Model):
     """Stores size according to category"""
 
@@ -46,11 +45,22 @@ class SubCategorySize(models.Model):
 
 
 class CustomStyleCategory(models.Model):
-
+    """Stores user-created clothing styles"""
 
     style_name = models.CharField(max_length=255)
     item = models.ManyToManyField('SubCategoryClother', related_name="item")
+    colour = models.ManyToManyField('Colour', related_name="colour")
 
 
     def __str__(self):
         return self.style_name
+
+
+class Colour(models.Model):
+
+
+    colour_name = models.CharField(max_length=255)
+    colour_id = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return self.colour_name
