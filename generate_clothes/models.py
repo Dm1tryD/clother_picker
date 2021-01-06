@@ -25,25 +25,6 @@ class SubCategoryClother(models.Model):
         return f"{self.menclother_category}, {self.subcategory}, {self.subcategory_id}"
 
 
-class SizeCategory(models.Model):
-    """Stores varieties of size categories"""
-
-    category_name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.category_name
-
-class SubCategorySize(models.Model):
-    """Stores size according to category"""
-
-    category_name = models.ForeignKey(SizeCategory, on_delete=models.CASCADE)
-    size_id = models.IntegerField(unique=True)
-    size_name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return f"{self.category_name}, {self.size_name}, Size id: {self.size_id}"
-
-
 class CustomStyleCategory(models.Model):
     """Stores user-created clothing styles"""
 
