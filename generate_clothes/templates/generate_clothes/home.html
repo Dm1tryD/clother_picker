@@ -1,0 +1,12 @@
+{% extends 'generate_clothes/base_generate_clothes.html' %}
+{% block title %}
+    Clothes
+{% endblock %}
+
+{% block content %}
+    {% for style in styles %}
+        <ul>
+            <li><a href="{{ style.get_absolute_url }}">{{ style.style_name }}</a></li>
+        </ul>
+    {% endfor %}
+{% endblock content %}

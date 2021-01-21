@@ -1,5 +1,5 @@
 """
-ASGI config for clother_picker project.
+ASGI config for clothes_picker project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'clother_picker.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'clothes_picker.settings')
 
 application = get_asgi_application()

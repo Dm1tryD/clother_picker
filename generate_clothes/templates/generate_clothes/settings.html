@@ -1,0 +1,12 @@
+{% extends 'generate_clothes/base_generate_clothes.html' %}
+{% block title %}
+    Settings
+{% endblock %}
+
+{% block content %}
+<form method = "post">
+    {% csrf_token %}
+    {{ form }}
+    <input type = "submit" value = "Submit">
+</form>
+{% endblock content %}

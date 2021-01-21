@@ -1,0 +1,19 @@
+{% extends 'generate_clothes/base_generate_clothes.html' %}
+{% block title %}
+    Clothes
+{% endblock %}
+
+{% block content %}
+    <h2>Style: {{ style.style_name }}</h2>
+    <a href="{{ style.get_absolute_url }}">generate next</a>
+    {% for key, value in clothes.items %}
+        <h2>{{ value.subcategory }}</h2>
+        <li>{{ value.name }}</li>
+        <li>{{ value.brandName }}</li>
+        <li>{{ value.price }}</li>
+        <li><a href="{{ value.url }}" target="_blank">Link</a></li>
+        <img src="{{ value.img }}">
+    {% endfor %}
+
+
+{% endblock content %}
