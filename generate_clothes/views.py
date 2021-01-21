@@ -40,9 +40,11 @@ class Settings(FormView):
     form_class = UserSettingsForm
     success_url = '/'
 
+
     def get_form_kwargs(self):
 
-        kwargs = {'data': self.request.session.get('form_data', None)}
+        session_data = {k:v for k,v in self.request.session.items()}
+        kwargs = {'data': session_data}
         kwargs.update(super(Settings, self).get_form_kwargs())
         return kwargs
 
@@ -52,8 +54,8 @@ class Settings(FormView):
 
     def set_user_config(self, user_data):
 
-        for key,v in user_data.items():
-            self.request.session[key] = v
+        for key, value in user_data.items():
+            self.request.session[key] = value
 
 
 class Home(generic.ListView):

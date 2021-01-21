@@ -9,7 +9,6 @@ import json
 
 class UserSettingsForm(forms.Form):
 
-
     countr_settings_q = CountrySettings.objects.all()
     country_choises = [[country.country,country.country] for country in countr_settings_q]
     GENDER_CHOISES = (
