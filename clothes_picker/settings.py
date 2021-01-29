@@ -96,7 +96,7 @@ DATABASES = {
         'PASSWORD': 'growstreethome',
         'HOST': 'localhost',
         'PORT': '5432',
-    }
+    },
 }
 
 

@@ -1,19 +1,19 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.http import HttpResponse
 from .models import *
 from .forms import UserSettingsForm
 from django.views.generic.edit import FormView
 from django.views import generic
+from django.db.models import Q
 from django.db import connection, reset_queries
 import time
 import functools
 from .utils import Clothes
 
 
-
-
 def query_debugger(func):
+    """Измеряет кол-во запросов в базу данных django"""
     @functools.wraps(func)
     def inner_func(*args, **kwargs):
         reset_queries()
@@ -33,13 +33,12 @@ def query_debugger(func):
 
     return inner_func
 
-class Settings(FormView):
 
+class Settings(FormView):
 
     template_name = 'generate_clothes/settings.html'
     form_class = UserSettingsForm
     success_url = '/'
-
 
     def get_form_kwargs(self):
 
@@ -49,6 +48,7 @@ class Settings(FormView):
         return kwargs
 
     def form_valid(self, form):
+
         self.set_user_config(form.cleaned_data)
         return super().form_valid(form)
 
@@ -59,43 +59,70 @@ class Settings(FormView):
 
 
 class Home(generic.ListView):
-    model = StyleCategory
+
+    model = Season
     template_name = 'generate_clothes/home.html'
+    context_object_name = 'seasons'
+
+class StylesPage(generic.ListView):
+
+    model = StyleCategory
+    template_name = 'generate_clothes/styles.html'
     context_object_name = 'styles'
 
+class Style(generic.ListView):
 
+    model = StyleCategory
+    template_name = 'generate_clothes/style_detail.html'
 
-@query_debugger
-def show_style(request, slug):
+    @query_debugger
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
+    def get_queryset(self, **kwargs):
+        return super().get_queryset().filter(slug=self.kwargs['slug'])[0]
 
-    country_settings = CountrySettings.objects.get(country=request.session['country'])
-    user_settings = dict(
-        country = country_settings.country,
-        currency = country_settings.currency,
-        language = country_settings.language,
-        store = country_settings.store,
-        clothes_size = request.session['clothes_size'],
-        shoes_size = request.session['shoes_size'],
-        gender = request.session['gender'],
-    )
+    def get_context_data(self, **kwargs):
 
+        context = super().get_context_data()
+        gender = self.request.session['gender']
+        season = self.kwargs['season']
+        queryset_style = context['object_list']
+        clothes_items_by_style = queryset_style.item.all().filter(
+            Q(season__slug=season) | Q(season__slug='demi-season'), gender=gender).\
+            values('clothes_category__category_name', 'subcategory', 'subcategory_num')
+        colours = [i.colour_id for i in queryset_style.colour.all()]
+        user_settings = self.get_user_settings()
+        clothes = self.get_clothes_by_style(clothes_items_by_style)
+        context.update(Clothes(clothes, colours, user_settings).get_items_by_category())
+        return context
 
-    style = StyleCategory.objects.filter(slug=slug).prefetch_related('item__clothes_category', 'colour')[0]
-    categories = list()
-    for category in style.item.all():
-        category_name = category.clothes_category.category_name
-        if category_name not in categories:
-            categories.append(category_name)
+    def get_clothes_by_style(self, queryset):
+        categories = self.get_categories_from_style(queryset)
+        clothes = dict()
+        for subcategory in categories:
+            item = {subcategory: [i['subcategory_num'] for i in queryset if
+                                 i['clothes_category__category_name'] == subcategory]}
+            clothes.update(item)
+        return clothes
 
-    clothes = dict()
-    for subcategory in categories:
-        item = {subcategory:[i.subcategory_num for i in style.item.all() if i.clothes_category.category_name == subcategory]}
-        clothes.update(item)
+    def get_categories_from_style(self, queryset):
+        categories = list()
+        for category in queryset:
+            if category['clothes_category__category_name'] not in categories:
+                categories.append(category['clothes_category__category_name'])
+        return categories
 
-
-    colours = [i.colour_id for i in style.colour.all()]
-
-    context = Clothes(clothes, colours, user_settings).get_items_by_category()
-    context.update({'style':style})
-    return render(request, 'generate_clothes/style_detail.html', context=context)
+    def get_user_settings(self):
+        country_settings = CountrySettings.objects.get(country=self.request.session['country'])
+        user_settings = dict(
+            country=country_settings.country,
+            currency=country_settings.currency,
+            language=country_settings.language,
+            store=country_settings.store,
+            sweater_size=self.request.session['sweater_size'],
+            pants_size=self.request.session['pants_size'],
+            shoes_size=self.request.session['shoes_size'],
+            gender=self.request.session['gender'],
+        )
+        return user_settings

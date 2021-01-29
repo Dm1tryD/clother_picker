@@ -4,7 +4,9 @@
 {% endblock %}
 
 {% block content %}
-    {% for season in seasons %}
-        <a href="{{ season.get_absolute_url }}">{{ season.season_name }}</a>
+    {% for style in styles %}
+        <ul>
+            <li><a href="{{ style.slug }}">{{ style.style_name }}</a></li>
+        </ul>
     {% endfor %}
 {% endblock content %}

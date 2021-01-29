@@ -6,7 +6,7 @@ import time
 class Clothes:
 
     source_url = 'https://www.asos.com/api/product/search/v2/categories/' \
-                 '{}?base_colour={}&channel=desktop-web&country={}&' \
+                 '{}?base_colour={}&channel=mobile-web&country={}&' \
                  'currency={}&keyStoreDataversion=3pmn72e-27&lang={}&limit=200&offset=0' \
                  '&rowlength=4&size_eu={}&store={}'
 
@@ -18,7 +18,8 @@ class Clothes:
         self.currency = user_settings["currency"]
         self.language = user_settings["language"]
         self.store = user_settings["store"]
-        self.clothes_size = user_settings["clothes_size"]
+        self.sweater_size = user_settings["sweater_size"]
+        self.pants_size = user_settings["pants_size"]
         self.shoes_size = user_settings["shoes_size"]
         self.gender = user_settings["gender"]
 
@@ -61,5 +62,7 @@ class Clothes:
     def get_size(self, category_name):
         if category_name == "shoes":
             return self.shoes_size
+        elif category_name == "pants":
+            return self.pants_size
         else:
-            return self.clothes_size
+            return self.sweater_size

@@ -35,7 +35,8 @@ class UserSettingsForm(forms.Form):
         ('1943', 'L'),
         ('1881', 'XL'),
     )
-    clothes_size = forms.ChoiceField(choices=CLOTHES_SIZE_CHOISES)
+    sweater_size = forms.ChoiceField(choices=CLOTHES_SIZE_CHOISES)
+    pants_size = forms.ChoiceField(choices=CLOTHES_SIZE_CHOISES)
     shoes_size = forms.ChoiceField(choices=SHOES_SIZE_CHOISES)
     country = forms.ChoiceField(choices=country_choises)
     gender = forms.ChoiceField(choices=GENDER_CHOISES)
