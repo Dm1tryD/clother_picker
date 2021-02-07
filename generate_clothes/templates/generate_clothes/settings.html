@@ -4,9 +4,24 @@
 {% endblock %}
 
 {% block content %}
-<form method = "post">
-    {% csrf_token %}
-    {{ form }}
-    <input type = "submit" value = "Submit">
-</form>
+    <div class="home">
+        <div class="desc">
+            <center>Добро пожаловать на STYLE HELPER.</center>
+            <center>Этот сайт поможет подобрать Вам одежду исходя из вашего размера, сезона и стиля.</center>
+            <center>Вся одежда представленная сдесь была взята с сайта asos.com</center>
+        </div>
+        <div class="settings">
+            <form method="post">
+            {% csrf_token %}
+            <div class="center">
+                {% for radio in form %}
+                    <div class="radio_field">
+                        {{ radio }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div><input class="submit" type="submit" value="Continue"></div>
+            </form>
+        </div>
+    </div>
 {% endblock content %}

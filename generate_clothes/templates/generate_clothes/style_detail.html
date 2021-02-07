@@ -4,16 +4,20 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Style: {{ style.style_name }}</h2>
-    <a href="{{ style.get_absolute_url }}">generate next</a>
-    {% for key, value in clothes.items %}
-        <h2>{{ value.subcategory }}</h2>
-        <li>{{ value.name }}</li>
-        <li>{{ value.brandName }}</li>
-        <li>{{ value.price }}</li>
-        <li><a href="{{ value.url }}" target="_blank">Link</a></li>
-        <img src="{{ value.img }}">
-    {% endfor %}
-
-
+    <div class="clothes">
+        <div class="description">Style: Street-kid{{ style.style_name }}</div>
+        <div class="items-wrapper">
+            {% for key, value in clothes.items %}
+                <div class="item">
+                    <a href="{{ value.url }}" target="_blank"><img src="{{ value.img }}" width="180"></a>
+                    <a href="{{ value.url }}" target="_blank">{{ value.name }}</a>
+                    <p>{{ value.price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="choice">
+            <a href="/"><button class="btn">Back to home</button></a>
+            <a href="{{ season.get_absolute_url }}"><button class="btn">Generate one more</button></a>
+        </div>
+    </div>
 {% endblock content %}

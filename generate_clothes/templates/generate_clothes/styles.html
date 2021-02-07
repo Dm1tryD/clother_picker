@@ -4,9 +4,14 @@
 {% endblock %}
 
 {% block content %}
-    {% for style in styles %}
-        <ul>
-            <li><a href="{{ style.slug }}">{{ style.style_name }}</a></li>
-        </ul>
-    {% endfor %}
+    <div class="styles">
+        <div class="description">Выберете стиль</div>
+        {% for style in styles %}
+            <div class="style-item">
+                <a class="tooltip-toggle" aria-label="{{ style.description }}" data-title="{{ style.description }}" href="{{ style.slug }}">
+                    {{ style.style_name }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

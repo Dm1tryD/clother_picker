@@ -1,0 +1,14 @@
+{% extends 'generate_clothes/base_generate_clothes.html' %}
+
+{% block title %}
+    Clothes
+{% endblock %}
+
+{% block content %}
+    <div class="seasons">
+        <div class="description">Выберете сезон</div>
+        {% for season in seasons %}
+            <a class="field" href="{{ season.get_absolute_url }}">{{ season.season_name }}</a>
+        {% endfor %}
+    </div>
+{% endblock content %}

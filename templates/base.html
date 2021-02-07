@@ -2,14 +2,27 @@
 {% load static %}
 <html lang="en">
 <head>
+    <title>Clothes</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Clothes</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <!-- scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    <!-- GOOGLE fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Hello there</h1>
-    {% block content %}
-        content
-    {% endblock %}
+    <div class="grid-container">
+        <div class="header">
+            <div id="name"><a href="/">STYLE HELPER</a></div>
+        </div>
+        <div class="main">
+            {% block content %}
+                content
+            {% endblock %}
+        </div>
+        <div class="footer"></div>
+    </div>
 </body>
 </html>
