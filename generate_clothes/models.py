@@ -24,7 +24,6 @@ class Season(models.Model):
 
     season_name = models.CharField(max_length=15)
     slug = models.SlugField(max_length=15, unique=True, blank=True)
-    image = models.ImageField(blank=True)
 
     def __str__(self):
         return self.season_name
@@ -69,6 +68,7 @@ class StyleCategory(models.Model):
     slug = models.SlugField(max_length=150, blank=True, unique=True)
     item = models.ManyToManyField('ClothesSubCategory', related_name="item")
     colour = models.ManyToManyField('Colour', related_name="colour")
+    description = models.CharField(max_length=255,blank=True)
 
     def __str__(self):
         return self.style_name

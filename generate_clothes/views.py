@@ -38,7 +38,7 @@ class Settings(FormView):
 
     template_name = 'generate_clothes/settings.html'
     form_class = UserSettingsForm
-    success_url = '/'
+    success_url = '/season/'
 
     def get_form_kwargs(self):
 
@@ -58,10 +58,10 @@ class Settings(FormView):
             self.request.session[key] = value
 
 
-class Home(generic.ListView):
+class Seasons(generic.ListView):
 
     model = Season
-    template_name = 'generate_clothes/home.html'
+    template_name = 'generate_clothes/seasons.html'
     context_object_name = 'seasons'
 
 class StylesPage(generic.ListView):
@@ -94,15 +94,17 @@ class Style(generic.ListView):
         colours = [i.colour_id for i in queryset_style.colour.all()]
         user_settings = self.get_user_settings()
         clothes = self.get_clothes_by_style(clothes_items_by_style)
-        context.update(Clothes(clothes, colours, user_settings).get_items_by_category())
+        #items = Clothes(clothes, colours, user_settings).get_items_by_category()
+        items = {'clothes': {'jacket': {'subcategory': 'Кожаные куртки', 'name': 'Коричневая кожаная куртка ASOS DESIGN', 'brandName': 'ASOS DESIGN', 'price': '9\xa0590,00 руб.', 'url': 'https://www.asos.com/asos-design/korichnevaya-kozhanaya-kurtka-asos-design/prd/21187196?clr=korichnevyj&colourwayid=60146711', 'img': 'http://images.asos-media.com/products/korichnevaya-kozhanaya-kurtka-asos-design/21187196-1-brown'}, 'sweater': {'subcategory': 'Cвитшоты', 'name': 'Черный свитшот Burton Menswear', 'brandName': 'Burton Menswear', 'price': '1\xa0790,00 руб.', 'url': 'https://www.asos.com/burton-menswear/chernyj-svitshot-burton-menswear/prd/22333796?clr=chernyj-tsvet&colourwayid=60390708', 'img': 'http://images.asos-media.com/products/chernyj-svitshot-burton-menswear/22333796-1-black'}, 'shirt': {'subcategory': 'Рубашки с принтами','name': 'Белая футболка со сплошным логотипом Versace Jeans Couture', 'brandName': 'Versace Jeans', 'price': '28\xa0190,00 руб.', 'url': 'https://www.asos.com/versace-jeans/belaya-futbolka-so-sploshnym-logotipom-versace-jeans-couture/prd/22072056?clr=belyj&colourwayid=60347443', 'img': 'http://images.asos-media.com/products/belaya-futbolka-so-sploshnym-logotipom-versace-jeans-couture/22072056-1-white'}, 'pants': {'subcategory': 'Темные джинсы', 'name': 'Серые узкие джинсы Only & Sons', 'brandName': 'Only & Sons', 'price': '2\xa0490,00 руб.', 'url': 'https://www.asos.com/only-sons/serye-uzkie-dzhinsy-only-sons/prd/22928017?clr=seryj-denim&colourwayid=60436987', 'img': 'http://images.asos-media.com/products/serye-uzkie-dzhinsy-only-sons/22928017-1-greydenim'}, 'shoes': {'subcategory': 'Кроссовки', 'name': 'Черные кроссовки с фактурной отделкой ASOS DESIGN', 'brandName': 'ASOS DESIGN', 'price': '2\xa0390,00 руб.', 'url': 'https://www.asos.com/asos-design/chernye-krossovki-s-fakturnoj-otdelkoj-asos-design/prd/21341710?clr=chernyj-tsvet&colourwayid=60158961', 'img': 'http://images.asos-media.com/products/chernye-krossovki-s-fakturnoj-otdelkoj-asos-design/21341710-1-black'}}}
+        context.update(items)
         return context
 
     def get_clothes_by_style(self, queryset):
         categories = self.get_categories_from_style(queryset)
         clothes = dict()
-        for subcategory in categories:
-            item = {subcategory: [i['subcategory_num'] for i in queryset if
-                                 i['clothes_category__category_name'] == subcategory]}
+        for category in categories:
+            item = {category: [i['subcategory_num'] for i in queryset if
+                                 i['clothes_category__category_name'] == category]}
             clothes.update(item)
         return clothes
 
